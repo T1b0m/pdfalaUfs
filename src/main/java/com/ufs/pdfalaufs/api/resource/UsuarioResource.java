@@ -2,6 +2,7 @@ package com.ufs.pdfalaufs.api.resource;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioResource {
 
 	private final UsuarioService service;
+	private final PasswordEncoder encoder;
 	
 	@PostMapping("/autenticar")
 	public ResponseEntity autenticar(@RequestBody UsuarioDTO dto) {
@@ -35,7 +37,8 @@ public class UsuarioResource {
 	// mapea este metodo para a requisicao para a url contida no @GetMapping("/)
 	@PostMapping
 	public ResponseEntity salvar(@RequestBody UsuarioDTO dto) {
-		Usuario usuario = Usuario.builder().cpf(dto.getCpf()).ativo(dto.getAtivo()).email(dto.getEmail()).nome(dto.getNome()).telefonePrincipal(dto.getTelefonePrincipal()).senha(dto.getSenha()).build();
+		String senhaCodificada = encoder.encode(dto.getSenha());
+		Usuario usuario = Usuario.builder().cpf(dto.getCpf()).ativo(dto.getAtivo()).email(dto.getEmail()).nome(dto.getNome()).telefonePrincipal(dto.getTelefonePrincipal()).senha(senhaCodificada).build();
 
 		try {
 			Usuario usuarioSalvo = service.salvarUsuario(usuario);

@@ -14,6 +14,7 @@ public class PdfalaufsApplication implements WebMvcConfigurer{
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
 	}
+	
 	public static void main(String[] args) {
 		SpringApplication.run(PdfalaufsApplication.class, args);
 	}

@@ -12,8 +12,15 @@ public interface UsuarioService {
 
 	Usuario salvarUsuario(Usuario usuario) throws RegraNegocioException;
 	
+	Usuario obterProEmail(String email);
+	
 	void validarEmail(String email) throws RegraNegocioException;
 	
+	void validarCpf(String cpf) throws RegraNegocioException;
+	
+	void verificaCpfValido(String cpf) throws RegraNegocioException;
+	
 	Optional<Usuario> obterPorId(Long id);
+	
 	
 }
