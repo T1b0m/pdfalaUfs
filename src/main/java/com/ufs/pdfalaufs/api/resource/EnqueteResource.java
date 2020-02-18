@@ -35,13 +35,13 @@ public class EnqueteResource {
 	private final EixoService eixoService;
 
 	@PostMapping
-	public ResponseEntity salvar(@RequestBody EnqueteDTO dto) throws RegraNegocioException {
+	public ResponseEntity<?> salvar(@RequestBody EnqueteDTO dto) throws RegraNegocioException {
 		Enquete enquete = converter(dto);
 
 		try {
 
 			Enquete enqueteSalva = service.salvarEnquete(enquete);
-			return new ResponseEntity(enqueteSalva, HttpStatus.CREATED);
+			return new ResponseEntity<>(enqueteSalva, HttpStatus.CREATED);
 
 		} catch (Exception e) {
 
@@ -51,13 +51,13 @@ public class EnqueteResource {
 	}
 
 	@GetMapping
-	public ResponseEntity buscar() {
+	public ResponseEntity<?> buscar() {
 		List<Enquete> enquetes = service.findAll();
 		return ResponseEntity.ok(enquetes);
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity atualizar(@PathVariable("id") UUID id, @RequestBody EnqueteDTO dto) {
+	public ResponseEntity<?> atualizar(@PathVariable("id") UUID id, @RequestBody EnqueteDTO dto) {
 		return service.findByIdEnquete(id).map(entity -> {
 			try {
 				Enquete enquete = converter(dto);
@@ -68,15 +68,15 @@ public class EnqueteResource {
 			} catch (RegraNegocioException e) {
 				return ResponseEntity.badRequest().body(e.getMessage());
 			}
-		}).orElseGet(() -> new ResponseEntity("Enquete nao encontrado na base", HttpStatus.BAD_REQUEST));
+		}).orElseGet(() -> new ResponseEntity<>("Enquete nao encontrado na base", HttpStatus.BAD_REQUEST));
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity deletar(@PathVariable("id") UUID id) {
+	public ResponseEntity<?> deletar(@PathVariable("id") UUID id) {
 		return service.findByIdEnquete(id).map(entity -> {
 			service.deletarEnquete(entity);
-			return new ResponseEntity(HttpStatus.NO_CONTENT);
-		}).orElseGet(() -> new ResponseEntity("Enquete nao encontrado na base", HttpStatus.BAD_REQUEST));
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}).orElseGet(() -> new ResponseEntity<>("Enquete nao encontrado na base", HttpStatus.BAD_REQUEST));
 
 	}
 	

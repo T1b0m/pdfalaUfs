@@ -1,6 +1,8 @@
 package com.ufs.pdfalaufs.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.ufs.pdfalaufs.model.entity.Usuario;
 import com.ufs.pdfalaufs.service.exception.RegraNegocioException;
@@ -20,7 +22,9 @@ public interface UsuarioService {
 	
 	void verificaCpfValido(String cpf) throws RegraNegocioException;
 	
-	Optional<Usuario> obterPorId(Long id);
+	Optional<Usuario> obterPorId(UUID id);
+	
+	List<Usuario> findAll();
 	
 	
 }

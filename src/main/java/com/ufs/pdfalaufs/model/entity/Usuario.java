@@ -58,9 +58,10 @@ public class Usuario {
 	@Temporal(TemporalType.TIMESTAMP)    
 	private Date dtInc = new java.sql.Date(System.currentTimeMillis());
 	
+	@Builder.Default
 	@Column(name = "dt_alt")
 	@Temporal(TemporalType.TIMESTAMP)    
-	private Date datAlt;
+	private Date datAlt= new java.sql.Date(System.currentTimeMillis());
 	
 }
 

@@ -29,25 +29,25 @@ public class EixoResource {
 	private final EixoService service;
 	
 	@PostMapping
-	public ResponseEntity salvar(@RequestBody EixoDTO dto) throws RegraNegocioException {
+	public ResponseEntity<?> salvar(@RequestBody EixoDTO dto) throws RegraNegocioException {
 		Eixo eixo = converter(dto);
 
 		try {
 			Eixo eixoSalvo = service.salvarEixo(eixo);
-			return new ResponseEntity(eixoSalvo, HttpStatus.CREATED);
+			return new ResponseEntity<>(eixoSalvo, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 	
 	@GetMapping
-	public ResponseEntity buscar(){
+	public ResponseEntity<?> buscar(){
 		List<Eixo> eixos = service.findAll();
 		return ResponseEntity.ok(eixos);
 	}
 	
 	@PutMapping("{id}")
-	public ResponseEntity atualizar(@PathVariable("id") UUID id, @RequestBody EixoDTO dto) {
+	public ResponseEntity<?> atualizar(@PathVariable("id") UUID id, @RequestBody EixoDTO dto) {
 		return service.obterPorId(id).map(entity -> {
 			try {
 				Eixo eixo =  converter(dto);
@@ -58,15 +58,15 @@ public class EixoResource {
 			}catch (RegraNegocioException e) {
 				return ResponseEntity.badRequest().body(e.getMessage());
 			}
-		}).orElseGet(() -> new ResponseEntity("Eixo nao encontrado na base", HttpStatus.BAD_REQUEST));
+		}).orElseGet(() -> new ResponseEntity<>("Eixo nao encontrado na base", HttpStatus.BAD_REQUEST));
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity deletar(@PathVariable("id") UUID id) {
+	public ResponseEntity<?> deletar(@PathVariable("id") UUID id) {
 		return service.obterPorId(id).map(entidade -> {
 			service.deletar(entidade);
-			return new ResponseEntity(HttpStatus.NO_CONTENT);
-		}).orElseGet(() -> new ResponseEntity("Eixo nao encontrado na base", HttpStatus.BAD_REQUEST));
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}).orElseGet(() -> new ResponseEntity<>("Eixo nao encontrado na base", HttpStatus.BAD_REQUEST));
 
 	}
 	

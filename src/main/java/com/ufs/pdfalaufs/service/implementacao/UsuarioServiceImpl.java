@@ -1,9 +1,11 @@
 package com.ufs.pdfalaufs.service.implementacao;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -133,13 +135,19 @@ public class UsuarioServiceImpl implements UsuarioService{
 	}
 
 	@Override
-	public Optional obterPorId(Long id) {
-		return repository.findById(id);
+	public Optional<Usuario> obterPorId(UUID id) {
+		return repository.findByIdUsuario(id);
 	}
 
 	@Override
 	public Usuario obterProEmail(String email) {
 		return repository.findByEmail(email).orElse(null);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Usuario> findAll() {
+		return repository.findAll();
 	}
 
 }

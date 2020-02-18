@@ -1,6 +1,7 @@
 package com.ufs.pdfalaufs.model.repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -16,4 +17,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 		boolean existsByCpf(String cpf);
 		
 		Optional<Usuario> findByEmail(String email);
+		
+		Optional<Usuario> findByIdUsuario(UUID idEixo);
 }

@@ -1,5 +1,8 @@
 package com.ufs.pdfalaufs.config;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,6 +13,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SimpleSavedRequest;
 
 import com.ufs.pdfalaufs.security.UserDetailsServiceImpl;
 
@@ -42,8 +48,25 @@ public class SecurityConfigurration extends WebSecurityConfigurerAdapter {
 		http
 		.csrf().disable().authorizeRequests()
 			.antMatchers(HttpMethod.POST, "/api/usuarios", "/api/usuarios/autenticar").permitAll()
+			.antMatchers("/**/*.{js,html,css}").permitAll()
+            .antMatchers("/login").permitAll()
 				.anyRequest().authenticated()
-					.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-					.and().httpBasic();  
+					.and().cors()
+					.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
+	
+	@Bean
+	public RequestCache refererRequestCache() {
+	    return new HttpSessionRequestCache() {
+	        @Override
+	        public void saveRequest(HttpServletRequest request, HttpServletResponse response) {
+	            String referrer = request.getHeader("referer");
+	            if (referrer != null) {
+	                request.getSession().setAttribute("SPRING_SECURITY_SAVED_REQUEST", new SimpleSavedRequest(referrer));
+	            }
+	        }
+	    };
+	}
+
 }
+ 
